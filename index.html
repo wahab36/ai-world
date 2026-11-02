@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Discover AI tools in one simple place." />
+    <title>AI World — Find AI tools</title>
+    <style>
+      :root { --ink:#172033; --muted:#667085; --violet:#6d28d9; --blue:#2563eb; --surface:#fff; --canvas:#f7f7fc; }
+      * { box-sizing: border-box; }
+      body { margin:0; color:var(--ink); background:var(--canvas); font:16px/1.5 system-ui,-apple-system,"Segoe UI",sans-serif; }
+      .wrap { width:min(1120px, calc(100% - 32px)); margin:auto; }
+      header { color:#fff; background:linear-gradient(125deg,#1d4ed8,#6d28d9); padding:28px 0 76px; }
+      nav { display:flex; justify-content:space-between; align-items:center; gap:16px; }
+      .brand { display:flex; align-items:center; gap:10px; font-weight:800; font-size:1.2rem; }
+      .brand-mark { display:grid; place-items:center; width:36px; height:36px; border:2px solid #fff; border-radius:12px; }
+      .hero { padding-top:58px; text-align:center; }
+      h1 { margin:0; font-size:clamp(2.2rem,6vw,4.3rem); letter-spacing:-.06em; }
+      .hero p { max-width:590px; margin:16px auto 26px; color:#e9e7ff; font-size:1.12rem; }
+      .search { display:flex; gap:10px; width:min(700px,100%); margin:auto; background:#fff; border-radius:16px; padding:7px; box-shadow:0 18px 40px #170c513d; }
+      .search input { width:100%; border:0; outline:0; padding:13px 16px; font:inherit; }
+      .search span { padding:13px 8px 13px 14px; color:var(--muted); }
+      main { margin-top:-29px; padding-bottom:54px; }
+      .section-title { display:flex; align-items:end; justify-content:space-between; gap:15px; margin:46px 0 16px; }
+      h2 { margin:0; font-size:1.45rem; letter-spacing:-.03em; } .hint { margin:0; color:var(--muted); font-size:.92rem; }
+      .categories { display:flex; flex-wrap:wrap; gap:10px; }
+      .chip { border:1px solid #e5e7eb; background:#fff; color:#344054; padding:10px 14px; border-radius:999px; font:inherit; cursor:pointer; }
+      .chip.active,.chip:hover { color:#fff; background:var(--violet); border-color:var(--violet); }
+      .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px; }
+      .card { display:flex; flex-direction:column; min-height:225px; padding:21px; background:var(--surface); border:1px solid #eaecf0; border-radius:20px; box-shadow:0 2px 7px #10182808; }
+      .card-top { display:flex; justify-content:space-between; align-items:flex-start; gap:10px; }
+      .tool-icon { display:grid; place-items:center; width:46px; height:46px; border-radius:14px; color:#fff; font-size:1.3rem; background:linear-gradient(135deg,#2563eb,#7c3aed); }
+      .fav { border:0; background:#f4f3ff; color:#6d28d9; width:40px; height:40px; border-radius:12px; cursor:pointer; font-size:1.2rem; }
+      .fav.saved { background:#ede9fe; color:#4c1d95; }
+      .tag { display:inline-block; margin-top:18px; color:#6941c6; background:#f4f3ff; border-radius:999px; padding:4px 10px; font-size:.76rem; font-weight:700; }
+      h3 { margin:11px 0 5px; font-size:1.13rem; } .card p { margin:0; color:var(--muted); font-size:.9rem; }
+      .visit { margin-top:auto; padding-top:16px; color:var(--blue); font-size:.92rem; font-weight:700; text-decoration:none; }
+      .empty { display:none; padding:30px; color:var(--muted); text-align:center; background:#fff; border-radius:18px; }
+      .game { padding:24px; border-radius:22px; color:#fff; background:linear-gradient(135deg,#0b1e3d,#312e81); box-shadow:0 12px 26px #172b5b24; }
+      .game h3 { margin:0 0 5px; font-size:1.25rem; } .game p { color:#e8edff; min-height:46px; }
+      .game button { padding:10px 14px; border:0; border-radius:10px; color:#312e81; background:#fff; font:700 .9rem inherit; cursor:pointer; }
+      .game button:hover { transform:translateY(-1px); }
+      .game-area { display:none; margin-top:16px; padding-top:16px; border-top:1px solid #ffffff4a; }
+      .game-area.show { display:block; } .question { margin:0 0 12px; font-weight:700; }
+      .stats { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0; } .stat { padding:11px; border-radius:12px; text-align:center; background:#ffffff18; } .stat span { display:block; font-size:.76rem; color:#dbeafe; } .stat strong { font-size:1.1rem; }
+      .story { min-height:62px; margin:14px 0; padding:13px; border-radius:12px; color:#eef2ff; background:#02061755; }
+      .jungle-map { display:block; width:100%; margin:14px 0 10px; border:2px solid #39544a; border-radius:14px; background:#07110e; box-shadow:inset 0 0 28px #000,0 8px 20px #0005; }
+      .map-help { margin:0 0 8px; color:#d1fae5; font-size:.85rem; }
+      .move-controls { display:grid; grid-template-columns:repeat(3,42px); justify-content:center; gap:5px; margin:8px 0 16px; }
+      .move-controls button { display:grid; place-items:center; min-height:38px; padding:0; color:#ecfdf5; background:#173f33; border:1px solid #6ee7b7; }
+      .move-controls button:hover { background:#28664f; } .move-controls .up { grid-column:2; } .move-controls .left { grid-column:1; grid-row:2; } .move-controls .down { grid-column:2; grid-row:2; } .move-controls .right { grid-column:3; grid-row:2; }
+      .actions { display:flex; flex-wrap:wrap; gap:9px; } .actions button { background:#fff; } .actions button:disabled { opacity:.55; cursor:not-allowed; }
+      .game-message { min-height:24px; margin:12px 0 0; color:#fff; font-weight:700; }
+      footer { color:var(--muted); text-align:center; padding:24px; font-size:.87rem; }
+      @media (max-width:520px) { .wrap { width:min(100% - 24px,1120px); } header { padding-top:18px; } .hero { padding-top:44px; } .search span { display:none; } }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="wrap">
+        <nav><div class="brand"><div class="brand-mark">AI</div> AI World</div><span>Explore • Save • Create</span></nav>
+        <div class="hero">
+          <h1>Your world of AI tools.</h1>
+          <p>Find helpful AI tools for creating, learning, writing, coding, and more.</p>
+          <label class="search"><span>⌕</span><input id="search" type="search" placeholder="Search tools, such as image or writing…" autocomplete="off" /></label>
+        </div>
+      </div>
+    </header>
+    <main class="wrap">
+      <section aria-label="Tool categories">
+        <div class="section-title"><h2>Browse by category</h2><p class="hint">Choose a topic you need</p></div>
+        <div class="categories" id="categories"></div>
+      </section>
+      <section>
+        <div class="section-title"><h2 id="tools-title">Popular tools</h2><p class="hint" id="result-count"></p></div>
+        <div class="grid" id="tools"></div>
+        <div class="empty" id="empty">No tools match that search yet. Try a different word.</div>
+      </section>
+      <section aria-label="Mini games">
+        <div class="section-title"><h2>AI mini games</h2><p class="hint">Learn while you play</p></div>
+        <article class="game">
+          <h3>Signal Survivor</h3>
+          <p>You wake up in an abandoned AI city. Explore for supplies, preserve your energy, and repair your rescue signal before it is too late.</p>
+          <button id="start-survival">Start survival game</button>
+          <div class="game-area" id="survival-area" aria-live="polite">
+            <div class="stats"><div class="stat"><span>HEALTH</span><strong id="health">100</strong></div><div class="stat"><span>ENERGY</span><strong id="energy">100</strong></div><div class="stat"><span>SIGNAL</span><strong id="signal">0/3</strong></div></div>
+            <canvas class="jungle-map" id="jungle-map" width="640" height="320" aria-label="A dark jungle map with your explorer character"></canvas>
+            <p class="map-help">Move your explorer: arrow keys, WASD, or the buttons below.</p>
+            <div class="move-controls" aria-label="Move explorer"><button class="up" data-move="up" aria-label="Move up">↑</button><button class="left" data-move="left" aria-label="Move left">←</button><button class="down" data-move="down" aria-label="Move down">↓</button><button class="right" data-move="right" aria-label="Move right">→</button></div>
+            <p class="story" id="survival-story">The city is quiet. Your emergency signal needs three working parts.</p>
+            <div class="actions"><button data-action="explore">Explore ruins</button><button data-action="rest">Rest safely</button><button data-action="repair">Repair signal</button></div>
+            <p class="game-message" id="survival-message"></p>
+          </div>
+        </article>
+      </section>
+    </main>
+    <footer>AI World is a simple directory. Always check each tool’s own terms and privacy policy.</footer>
+    <script>
+      const tools = [
+        {name:'ChatGPT', category:'Chat', icon:'✦', description:'Ask questions, brainstorm ideas, and get help with everyday tasks.', url:'https://chatgpt.com/'},
+        {name:'Google Gemini', category:'Chat', icon:'✧', description:'An AI assistant for writing, planning, learning, and more.', url:'https://gemini.google.com/'},
+        {name:'Perplexity', category:'Study', icon:'⌘', description:'Research questions with web-based answers and sources.', url:'https://www.perplexity.ai/'},
+        {name:'Midjourney', category:'Image', icon:'◉', description:'Create imaginative images from a written description.', url:'https://www.midjourney.com/'},
+        {name:'Canva AI', category:'Image', icon:'✿', description:'Make designs and generate images for social posts and projects.', url:'https://www.canva.com/ai-image-generator/'},
+        {name:'GitHub Copilot', category:'Coding', icon:'</>', description:'Get AI help while writing and understanding computer code.', url:'https://github.com/features/copilot'},
+        {name:'Grammarly', category:'Writing', icon:'G', description:'Improve spelling, grammar, and the clarity of your writing.', url:'https://www.grammarly.com/'},
+        {name:'Khanmigo', category:'Study', icon:'K', description:'An AI learning companion for students and teachers.', url:'https://www.khanacademy.org/khan-labs'}
+      ];
+      const categories = ['All', ...new Set(tools.map(tool => tool.category)), 'Favorites'];
+      let selected = 'All';
+      let query = '';
+      const getFavorites = () => JSON.parse(localStorage.getItem('ai-world-favorites') || '[]');
+      const setFavorites = list => localStorage.setItem('ai-world-favorites', JSON.stringify(list));
+      const categoryBox = document.querySelector('#categories');
+      const toolBox = document.querySelector('#tools');
+      const empty = document.querySelector('#empty');
+      function renderCategories() {
+        categoryBox.innerHTML = categories.map(category => `<button class="chip ${category === selected ? 'active' : ''}" data-category="${category}">${category}</button>`).join('');
+      }
+      function renderTools() {
+        const favorites = getFavorites();
+        const visible = tools.filter(tool => (selected === 'All' || (selected === 'Favorites' ? favorites.includes(tool.name) : tool.category === selected)) && `${tool.name} ${tool.category} ${tool.description}`.toLowerCase().includes(query));
+        document.querySelector('#tools-title').textContent = selected === 'Favorites' ? 'Your favorites' : selected === 'All' ? 'Popular tools' : `${selected} tools`;
+        document.querySelector('#result-count').textContent = `${visible.length} tool${visible.length === 1 ? '' : 's'} found`;
+        toolBox.innerHTML = visible.map(tool => `<article class="card"><div class="card-top"><div class="tool-icon">${tool.icon}</div><button class="fav ${favorites.includes(tool.name) ? 'saved' : ''}" data-favorite="${tool.name}" aria-label="Save ${tool.name}">${favorites.includes(tool.name) ? '♥' : '♡'}</button></div><span class="tag">${tool.category}</span><h3>${tool.name}</h3><p>${tool.description}</p><a class="visit" href="${tool.url}" target="_blank" rel="noopener noreferrer">Visit tool →</a></article>`).join('');
+        empty.style.display = visible.length ? 'none' : 'block';
+      }
+      categoryBox.addEventListener('click', event => { if (event.target.dataset.category) { selected = event.target.dataset.category; renderCategories(); renderTools(); } });
+      toolBox.addEventListener('click', event => { const name = event.target.dataset.favorite; if (!name) return; const list = getFavorites(); setFavorites(list.includes(name) ? list.filter(item => item !== name) : [...list, name]); renderTools(); });
+      document.querySelector('#search').addEventListener('input', event => { query = event.target.value.trim().toLowerCase(); renderTools(); });
+      const map = document.querySelector('#jungle-map');
+      const mapContext = map.getContext('2d');
+      let player = { x: 320, y: 250 };
+      function drawJungle() {
+        const c = mapContext, w = map.width, h = map.height, horizon = 112;
+        const sky = c.createLinearGradient(0, 0, 0, horizon); sky.addColorStop(0, '#020b13'); sky.addColorStop(1, '#12352a'); c.fillStyle = sky; c.fillRect(0, 0, w, horizon);
+        c.fillStyle = '#07110e'; c.fillRect(0, horizon, w, h - horizon);
+        c.fillStyle = '#0d2b20'; c.beginPath(); c.moveTo(220, horizon); c.lineTo(420, horizon); c.lineTo(w, h); c.lineTo(0, h); c.closePath(); c.fill();
+        c.strokeStyle = '#3a7b5e66'; c.lineWidth = 1;
+        for (let i = 0; i < 15; i++) { const x = 15 + i * 44; c.beginPath(); c.moveTo(320, horizon); c.lineTo(x, h); c.stroke(); }
+        for (let i = 1; i < 10; i++) { const y = horizon + Math.pow(i / 9, 2) * (h - horizon); c.beginPath(); c.moveTo(0, y); c.lineTo(w, y); c.stroke(); }
+        const tree = (x, base, scale) => { c.fillStyle = '#09130d'; c.fillRect(x - 5 * scale, base - 95 * scale, 10 * scale, 100 * scale); c.fillStyle = '#102a1a'; for (let i = 0; i < 4; i++) { c.beginPath(); c.arc(x + (i - 1.5) * 14 * scale, base - (74 + (i % 2) * 16) * scale, 34 * scale, 0, Math.PI * 2); c.fill(); } c.fillStyle = '#b7ff61'; c.globalAlpha = .75; c.fillRect(x - 12 * scale, base - 58 * scale, 3 * scale, 3 * scale); c.fillRect(x + 9 * scale, base - 58 * scale, 3 * scale, 3 * scale); c.globalAlpha = 1; };
+        [[42,196,1.45],[125,174,1.12],[570,190,1.35],[502,166,.92],[215,143,.55],[430,146,.56],[302,132,.34]].forEach(item => tree(...item));
+        const fog = c.createLinearGradient(0, horizon, 0, h); fog.addColorStop(0, '#b5ffe018'); fog.addColorStop(1, '#07110e00'); c.fillStyle = fog; c.fillRect(0, horizon, w, h - horizon);
+        c.fillStyle = '#fef3c7'; c.beginPath(); c.arc(player.x, player.y - 25, 9, 0, Math.PI * 2); c.fill();
+        c.fillStyle = '#1d4ed8'; c.fillRect(player.x - 9, player.y - 15, 18, 27); c.fillStyle = '#0f172a'; c.fillRect(player.x - 14, player.y + 11, 10, 22); c.fillRect(player.x + 4, player.y + 11, 10, 22);
+        c.strokeStyle = '#86efac'; c.lineWidth = 3; c.beginPath(); c.moveTo(player.x, player.y - 3); c.lineTo(player.x + 25, player.y - 12); c.stroke(); c.fillStyle = '#dcfce7'; c.beginPath(); c.arc(player.x + 27, player.y - 13, 6, 0, Math.PI * 2); c.fill();
+      }
+      function moveExplorer(direction) {
+        if (gameOver) return;
+        const distance = 14;
+        if (direction === 'left') player.x -= distance; if (direction === 'right') player.x += distance; if (direction === 'up') player.y -= distance; if (direction === 'down') player.y += distance;
+        player.x = Math.max(170, Math.min(470, player.x)); player.y = Math.max(155, Math.min(272, player.y)); drawJungle(); tellStory('You move quietly through the jungle. Something is watching from the trees…');
+      }
+      let health = 100, energy = 100, signal = 0, gameOver = false;
+      const statUpdate = () => { document.querySelector('#health').textContent = health; document.querySelector('#energy').textContent = energy; document.querySelector('#signal').textContent = `${signal}/3`; };
+      function tellStory(text) { document.querySelector('#survival-story').textContent = text; }
+      function endGame(message) { gameOver = true; document.querySelector('#survival-message').textContent = `${message} Press “Start survival game” to play again.`; document.querySelectorAll('.actions button').forEach(button => button.disabled = true); }
+      document.querySelector('#start-survival').addEventListener('click', () => {
+        health = 100; energy = 100; signal = 0; gameOver = false; player = { x: 320, y: 250 }; statUpdate(); drawJungle(); tellStory('You wake in a dark jungle beside a broken rescue beacon. Find three parts before the jungle finds you.'); document.querySelector('#survival-message').textContent = ''; document.querySelector('#survival-area').classList.add('show'); document.querySelectorAll('.actions button').forEach(button => button.disabled = false);
+      });
+      document.querySelector('.move-controls').addEventListener('click', event => { if (event.target.dataset.move) moveExplorer(event.target.dataset.move); });
+      document.addEventListener('keydown', event => { if (event.target.tagName === 'INPUT' || !document.querySelector('#survival-area').classList.contains('show')) return; const moves = {ArrowUp:'up',ArrowDown:'down',ArrowLeft:'left',ArrowRight:'right',w:'up',W:'up',s:'down',S:'down',a:'left',A:'left',d:'right',D:'right'}; if (moves[event.key]) { event.preventDefault(); moveExplorer(moves[event.key]); } });
+      document.querySelector('.actions').addEventListener('click', event => {
+        const action = event.target.dataset.action; if (!action || gameOver) return;
+        if (action === 'explore') {
+          energy -= 18;
+          const events = [
+            ['You find an energy cell hidden in a broken drone. Energy +24.', () => energy += 24],
+            ['A metal shard cuts you while you search. Health -18.', () => health -= 18],
+            ['You discover a signal component beneath the dust!', () => signal++]
+          ]; const chosen = events[Math.floor(Math.random() * events.length)]; chosen[1](); tellStory(chosen[0]);
+        }
+        if (action === 'rest') { energy = Math.min(100, energy + 25); tellStory('You shelter under a glowing billboard and recover energy.'); }
+        if (action === 'repair') {
+          if (energy < 15) tellStory('You are too tired to work on the signal. Rest or explore first.');
+          else { energy -= 15; signal++; tellStory('You carefully connect one component to the emergency beacon. Signal progress +1.'); }
+        }
+        health = Math.max(0, health); energy = Math.max(0, energy); signal = Math.min(3, signal); statUpdate();
+        if (signal === 3) endGame('You repaired the signal — a rescue drone finds you. You survived!');
+        else if (health === 0 || energy === 0) endGame('Your journey ends in the silent city.');
+      });
+      drawJungle(); renderCategories(); renderTools();
+    </script>
+  </body>
+</html>
